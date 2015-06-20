@@ -44,7 +44,16 @@ struct MainViewModel {
 	}
 	
 	func reset() {
-		onAction(self, .Reset)
+		if let name = AppDelegate.shared().getName() {
+		
+			let query = PFQuery(className: "Feeder")
+			query.whereKey("name", equalTo: name)
+			query.findObjectsInBackgroundWithBlock() { (objects, error) -> Void in
+				PFObject.deleteAllInBackground(objects, block: nil)
+			}
+			
+			onAction(self, .Reset)
+		}
 	}
 	
 }

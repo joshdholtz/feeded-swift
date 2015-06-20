@@ -13,6 +13,9 @@ class MainViewController: UIViewController {
 	var btnLogout: UIBarButtonItem {
 		return UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showConfirmation"))
 	}
+	var btnReset: UIBarButtonItem {
+		return UIBarButtonItem(title: "Reset", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reset"))
+	}
 	var btnYes: UIBarButtonItem {
 		return UIBarButtonItem(title: "Yes", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout"))
 	}
@@ -56,6 +59,7 @@ class MainViewController: UIViewController {
 	// MARK: Actions
 	
 	@objc private func logout() { viewModel.logout() }
+	@objc private func reset() { viewModel.reset() }
 	@objc private func showConfirmation() { viewModel.showConfirmation() }
 	@objc private func showLogout() { viewModel.showLogout() }
 	
@@ -70,7 +74,7 @@ class MainViewController: UIViewController {
 			
 		case .ShowLogout: ()
 			navigationItem.setLeftBarButtonItem(btnLogout, animated: true)
-			navigationItem.setRightBarButtonItem(nil, animated: true)
+			navigationItem.setRightBarButtonItem(btnReset, animated: true)
 		case .ShowLogoutConfirmation:
 			navigationItem.setLeftBarButtonItem(btnYes, animated: true)
 			navigationItem.setRightBarButtonItem(btnNo, animated: true)
