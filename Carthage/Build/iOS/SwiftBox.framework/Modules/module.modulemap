@@ -1,0 +1,10 @@
+framework module SwiftBox {
+  umbrella header "SwiftBox.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftBox.Swift {
+    header "SwiftBox-Swift.h"
+}

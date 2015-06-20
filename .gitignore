@@ -25,3 +25,6 @@ fastlane/report.xml
 *.mobileprovision
 *.app.dSYM.zip
 *.ipa
+
+# Environment Stuff
+Feeded/Environment.swift

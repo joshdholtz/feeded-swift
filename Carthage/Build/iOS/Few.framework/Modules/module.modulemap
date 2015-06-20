@@ -1,0 +1,10 @@
+framework module Few {
+  umbrella header "Few.h"
+
+  export *
+  module * { export * }
+}
+
+module Few.Swift {
+    header "Few-Swift.h"
+}

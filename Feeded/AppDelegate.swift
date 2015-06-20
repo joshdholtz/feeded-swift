@@ -12,35 +12,55 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
-
+	
+	static func shared() -> AppDelegate {
+		return UIApplication.sharedApplication().delegate as! AppDelegate
+	}
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		// Override point for customization after application launch.
+
+		// Setup Parse
+		Parse.setApplicationId(Environment.parseApplicationId, clientKey: Environment.parseClientKey)
+		
+		// Default styles
+		UINavigationBar.appearance().barTintColor = Colors.wetAsphalt
+		UINavigationBar.appearance().tintColor = Colors.clouds
+		UINavigationBar.appearance().titleTextAttributes = [
+			NSForegroundColorAttributeName: Colors.clouds
+		]
+		
+		// Status bar
+		UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+		
 		return true
 	}
-
-	func applicationWillResignActive(application: UIApplication) {
-		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+	
+	func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+		let currentInstallation = PFInstallation.currentInstallation()
+		currentInstallation.setDeviceTokenFromData(deviceToken)
+		currentInstallation.saveInBackgroundWithBlock(nil)
 	}
-
-	func applicationDidEnterBackground(application: UIApplication) {
-		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+	
+	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+		// TODO: Need to send notification to update UI
 	}
-
-	func applicationWillEnterForeground(application: UIApplication) {
-		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-	}
-
-	func applicationDidBecomeActive(application: UIApplication) {
-		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-	}
-
-	func applicationWillTerminate(application: UIApplication) {
-		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-	}
-
 
 }
 
+private let nameKey = "name"
+extension AppDelegate {
+	
+	func getName() -> String? {
+		return NSUserDefaults.standardUserDefaults().stringForKey(nameKey)
+	}
+	
+	func setName(name: String?) {
+		if let name = name {
+			NSUserDefaults.standardUserDefaults().setObject(name, forKey: nameKey)
+		} else {
+			NSUserDefaults.standardUserDefaults().removeObjectForKey(nameKey)
+		}
+		NSUserDefaults.standardUserDefaults().synchronize()
+	}
+	
+}
