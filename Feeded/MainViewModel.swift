@@ -14,8 +14,9 @@ struct MainViewModel {
 		case Logout
 		case Reset
 		
-		case ShowLogout
+		case ShowOptions
 		case ShowLogoutConfirmation
+		case ShowResetConfirmation
 	}
 	
 	typealias OnAction = (MainViewModel, Action) -> ()
@@ -35,21 +36,42 @@ struct MainViewModel {
 		onAction(self, .Logout)
 	}
 	
-	func showConfirmation() {
+	func showLogoutConfirmation() {
 		onAction(self, .ShowLogoutConfirmation)
 	}
 	
-	func showLogout() {
-		onAction(self, .ShowLogout)
+	func showOptions() {
+		onAction(self, .ShowOptions)
+	}
+	
+	func showResetConfirmation() {
+		onAction(self, .ShowResetConfirmation)
+	}
+	
+	func updateBadgeCount() {
+		if let name = AppDelegate.shared().getName() {
+			let query = PFQuery(className: "Feeder")
+			query.whereKey("name", equalTo: name)
+			query.findObjectsInBackgroundWithBlock() { (objects, error) -> Void in
+				if let objects = objects {
+					UIApplication.sharedApplication().applicationIconBadgeNumber = count(objects)
+				} else {
+					UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+				}
+			}
+		} else {
+			UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+		}
 	}
 	
 	func reset() {
 		if let name = AppDelegate.shared().getName() {
-		
 			let query = PFQuery(className: "Feeder")
 			query.whereKey("name", equalTo: name)
 			query.findObjectsInBackgroundWithBlock() { (objects, error) -> Void in
-				PFObject.deleteAllInBackground(objects, block: nil)
+				PFObject.deleteAllInBackground(objects) { (success, error) -> Void in
+					self.updateBadgeCount()
+				}
 			}
 			
 			onAction(self, .Reset)

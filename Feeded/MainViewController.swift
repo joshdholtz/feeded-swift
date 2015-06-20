@@ -9,19 +9,6 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
-	var btnLogout: UIBarButtonItem {
-		return UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showConfirmation"))
-	}
-	var btnReset: UIBarButtonItem {
-		return UIBarButtonItem(title: "Reset", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reset"))
-	}
-	var btnYes: UIBarButtonItem {
-		return UIBarButtonItem(title: "Yes", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout"))
-	}
-	var btnNo: UIBarButtonItem {
-		return UIBarButtonItem(title: "No", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showLogout"))
-	}
 	
 	var viewModel: MainViewModel!
 	
@@ -45,7 +32,8 @@ class MainViewController: UIViewController {
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		viewModel.showLogout()
+		viewModel.showOptions()
+		viewModel.updateBadgeCount()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
@@ -58,10 +46,12 @@ class MainViewController: UIViewController {
 	
 	// MARK: Actions
 	
+	@objc private func nothing() { }
 	@objc private func logout() { viewModel.logout() }
 	@objc private func reset() { viewModel.reset() }
-	@objc private func showConfirmation() { viewModel.showConfirmation() }
-	@objc private func showLogout() { viewModel.showLogout() }
+	@objc private func showLogoutConfirmation() { viewModel.showLogoutConfirmation() }
+	@objc private func showOptions() { viewModel.showOptions() }
+	@objc private func showResetConfirmation() { viewModel.showResetConfirmation() }
 	
 	// MARK: Private
 	
@@ -70,13 +60,16 @@ class MainViewController: UIViewController {
 		case .Logout:
 			self.showSetup()
 		case .Reset:
-			()
+			viewModel.showOptions()
 			
-		case .ShowLogout: ()
+		case .ShowOptions: ()
 			navigationItem.setLeftBarButtonItem(btnLogout, animated: true)
 			navigationItem.setRightBarButtonItem(btnReset, animated: true)
 		case .ShowLogoutConfirmation:
-			navigationItem.setLeftBarButtonItem(btnYes, animated: true)
+			navigationItem.setLeftBarButtonItem(btnYesLogout, animated: true)
+			navigationItem.setRightBarButtonItem(btnNo, animated: true)
+		case .ShowResetConfirmation:
+			navigationItem.setLeftBarButtonItem(btnYesReset, animated: true)
 			navigationItem.setRightBarButtonItem(btnNo, animated: true)
 		}
 	}
@@ -114,4 +107,30 @@ extension MainViewController: UITableViewDelegate {
 		
 	}
 	
+}
+
+// MARK: Navigation bar buttons
+// Buttons are in this extension because they looked ugly at the top of the view controller
+
+extension MainViewController {
+	var btnLogout: UIBarButtonItem {
+		let image = IonIcons.imageWithIcon(ion_log_out, iconColor: Colors.clouds, iconSize: 30, imageSize: CGSize(width: 30, height: 30))
+		return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showLogoutConfirmation"))
+	}
+	var btnReset: UIBarButtonItem {
+		let image = IonIcons.imageWithIcon(ion_nuclear, iconColor: Colors.clouds, iconSize: 30, imageSize: CGSize(width: 30, height: 30))
+		return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showResetConfirmation"))
+	}
+	var btnYesLogout: UIBarButtonItem {
+		let image = IonIcons.imageWithIcon(ion_android_checkmark_circle, iconColor: Colors.clouds, iconSize: 30, imageSize: CGSize(width: 30, height: 30))
+		return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout"))
+	}
+	var btnYesReset: UIBarButtonItem {
+		let image = IonIcons.imageWithIcon(ion_android_checkmark_circle, iconColor: Colors.clouds, iconSize: 30, imageSize: CGSize(width: 30, height: 30))
+		return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reset"))
+	}
+	var btnNo: UIBarButtonItem {
+		let image = IonIcons.imageWithIcon(ion_android_close, iconColor: Colors.clouds, iconSize: 30, imageSize: CGSize(width: 30, height: 30))
+		return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("showOptions"))
+	}
 }

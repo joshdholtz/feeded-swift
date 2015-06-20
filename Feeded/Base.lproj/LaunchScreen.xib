@@ -10,7 +10,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="pYU-CK-h2K">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="pYU-CK-h2K">
                     <rect key="frame" x="90" y="90" width="300" height="300"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="300" id="9D0-eB-T4w"/>
@@ -29,6 +29,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Icon" width="1024" height="1024"/>
+        <image name="Logo" width="1024" height="1024"/>
     </resources>
 </document>
